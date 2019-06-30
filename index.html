@@ -86,7 +86,7 @@
             <label for="videoSource">Video Source:</label><select id="videoSource"></select>
         </div>
         <br />
-        
+
         <button id="record">Start Recording</button>
         <button id="play" disabled>Play</button>
         <button id="download" disabled>Download</button>
@@ -118,16 +118,36 @@
                 <td id="moRotation">No Gyroscope</td>
             </tr>
             <tr>
+                <td>Tilt Left/Right [gamma]</td>
+                <td id="doTiltLR"></td>
+            </tr>
+            <tr>
+                <td>Tilt Front/Back [beta]</td>
+                <td id="doTiltFB"></td>
+            </tr>
+            <tr>
+                <td>Direction [alpha]</td>
+                <td id="doDirection"></td>
+            </tr>
+            <tr>
+                <td>Pose Vector</td>
+                <td id="orSen"></td>
+            </tr>
+            <tr>
                 <td>interval (ms)</td>
                 <td id="moInterval">Infinity</td>
             </tr>
         </table>
-        <!--<input type="button" id="export" value="output" />-->
         
+        <div class="container" id="logoContainer">
+            <img src="camera.png" id="imgLogo">
+        </div>
+        <!--<input type="button" id="export" value="output" />-->
+
         <p id="RotSequence">I'm Here</p>
         <br />
         <p id="AccSequence">I'm Here too</p>
-        
+
         <br />
         <h1> Sensor Data Collection : <span>Network State</span></h1>
         <p> Current Network Connection Type is <b id="networkType">not available</b>.</p>
@@ -137,7 +157,7 @@
     </div>
 
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    
+
     <!--<script src="Sensor3.0.js"></script>-->
     <script src="Network.js"></script>
     <script src="SaveStream.js"></script>
@@ -145,8 +165,8 @@
 
     <script src="FileSaver.js"></script>
     <script type="text/javascript">
-        
-        
+
+
 
     </script>
 </body>
