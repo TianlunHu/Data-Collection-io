@@ -59,10 +59,10 @@ downloadButton.addEventListener('click', () => {
         type: "text/plain;charset=utf-8"
     });
     saveAs(r, "Rotation.txt");
-    const a = new Blob(A, {
+    /*const a = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(a, "Acceleration.txt");
+    saveAs(a, "Acceleration.txt");*/
     
 });
 
