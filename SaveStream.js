@@ -51,11 +51,19 @@ downloadButton.addEventListener('click', () => {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }, 100);
-
-    const b = new Blob(["Hello, world!"], {
+    
+    const R = document.getElementById('RotSequence');
+    const A = document.getElementById('AccSequence')
+    
+    const r = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(b, "hello world.txt");
+    saveAs(r, "Rotation.txt");
+    const a = new Blob(A, {
+        type: "text/plain;charset=utf-8"
+    });
+    saveAs(a, "Acceleration.txt");
+    
 });
 
 function handleSourceOpen(event) {
@@ -152,19 +160,3 @@ async function init(constraints) {
         errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
     }
 }
-
-/*
-document.querySelector('button#start').addEventListener('click', async () => {
-  const hasEchoCancellation = document.querySelector('#echoCancellation').checked;
-  const constraints = {
-    audio: {
-      echoCancellation: {exact: hasEchoCancellation}
-    },
-    video: {
-      width: 1280, height: 720
-    }
-  };
-  console.log('Using media constraints:', constraints);
-  await init(constraints);
-});
-*/
