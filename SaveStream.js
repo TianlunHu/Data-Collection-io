@@ -54,6 +54,7 @@ downloadButton.addEventListener('click', () => {
     
     const R = rotVec;
     const A = AccVec;
+    const O = OriVec;
     
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
@@ -63,6 +64,10 @@ downloadButton.addEventListener('click', () => {
         type: "text/plain;charset=utf-8"
     });
     saveAs(acc, "Acceleration.txt");
+    const ori = new Blob(O, {
+        type: "text/plain;charset=utf-8"
+    });
+    saveAs(ori, "orientation.txt");
     
 });
 
@@ -165,9 +170,10 @@ async function init(constraints) {
 ////////////////////////////////////////////////////////////////
 var AccVec = [];
 var rotVec = [];
+var OriVec = [];
 
 //----------------- Orientation Sensor -------------- //
-if ('DeviceOrientationEvent' in window) {
+/*if ('DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', deviceOrientationHandler, false);
 } else {
   document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
@@ -192,8 +198,31 @@ function deviceOrientationHandler (eventData) {
   logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
   logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
   logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-}
+}*/
 //----------------Motion Sensors (IMU) ---------------- //
+function deviceOrientationHandler(orientation, OV, t) {
+  var tiltLR = orientation.gamma;
+  var tiltFB = orientation.beta;
+  var dir = orientation.alpha;
+  var info, xyz = "[t, X, Y, Z]";
+  
+  info = xyz.replace("t", t);
+  info = info.replace("X", Math.round(tiltLR));
+  info = info.replace("Y", Math.round(tiltFB));
+  info = info.replace("Z", Math.round(dir));
+  document.getElementById('orSen').innerHTML = info;
+  OV.push(info);
+    
+  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+  document.getElementById("doDirection").innerHTML = Math.round(dir);
+
+  var logo = document.getElementById("imgLogo");
+  logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+  logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
+  logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+}
+
 function accelerationHandler(acceleration, AV, t) {
     var info, xyz = "[t, X, Y, Z]";
     info = xyz.replace("t", t);
@@ -202,7 +231,7 @@ function accelerationHandler(acceleration, AV, t) {
     info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
     document.getElementById('moAccel').innerHTML = info;
     AV.push(info);
-    document.getElementById('AccSequence').innerHTML = AV;
+    /*document.getElementById('AccSequence').innerHTML = AV;*/
 }
 
 function rotationHandler(rotation, RV, t) {
@@ -213,7 +242,7 @@ function rotationHandler(rotation, RV, t) {
     info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
     document.getElementById("moRotation").innerHTML = info;
     RV.push(info);
-    document.getElementById('RotSequence').innerHTML = RV;
+    /*document.getElementById('RotSequence').innerHTML = RV;*/
 }
 
 function intervalHandler(interval) {
@@ -227,6 +256,9 @@ if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
         frequency: 30
     });
     let gyroscope = new Gyroscope({
+        frequency: 30
+    });
+    let orientator = new new AbsoluteOrientationSensor({
         frequency: 30
     });
 
@@ -249,9 +281,14 @@ if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
         beta: gyroscope.y,
         gamma: gyroscope.z
     }, rotVec, gyroscope.timestamp));
-
+    
+    orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, OriVec, orientator.timestamp));
+    
+    
     accelerometer.start();
     gyroscope.start();
+    orientator.start();
+    
 } else if ('DeviceMotionEvent' in window) {
     document.getElementById('moApi').innerHTML = 'Device Motion Event';
 
