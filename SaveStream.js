@@ -258,7 +258,7 @@ if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
     let gyroscope = new Gyroscope({
         frequency: 30
     });
-    let orientator = new new AbsoluteOrientationSensor({
+    let orientator = new AbsoluteOrientationSensor({
         frequency: 30
     });
 
