@@ -39,25 +39,7 @@ playButton.addEventListener('click', () => {
 
 const downloadButton = document.querySelector('button#download');
 downloadButton.addEventListener('click', () => {
-    const blob = new Blob(recordedBlobs, {
-        type: 'video/webm'
-    });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'test.webm';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-    }, 100);
-
-    const R = rotVec;
-    const A = AccVec;
-    const O = OriVec;
-
+    //Get Time for files' Name.
     Date.prototype.format = function (format) {
         var o = {
             "M+": this.getMonth() + 1, //month
@@ -65,8 +47,8 @@ downloadButton.addEventListener('click', () => {
             "h+": this.getHours(), //hour
             "m+": this.getMinutes(), //minute
             "s+": this.getSeconds(), //second
-            //"q+": Math.floor((this.getMonth() + 3) / 3), //quarter
-            //"S": this.getMilliseconds() //millisecond
+            /*"q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            "S": this.getMilliseconds() //millisecond*/
         }
         if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
             (this.getFullYear() + "").substr(4 - RegExp.$1.length));
@@ -77,21 +59,42 @@ downloadButton.addEventListener('click', () => {
                     ("00" + o[k]).substr(("" + o[k]).length));
         return format;
     }
+    
     const T = new Date();
     T.format('yyyy-MM-dd');
+    //Save Sequence as Vodeo
+    const blob = new Blob(recordedBlobs, {
+        type: 'video/webm'
+    });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'Sequence ' + T + '.webm';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 100);
+    
+    //Save Sensor Date as .txt
+    const R = rotVec;
+    const A = AccVec;
+    const O = OriVec;
 
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(rot, "Rotation" + T + ".txt");
+    saveAs(rot, "Rotation  " + T + ".txt");
     const acc = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(acc, "Acceleration" + T + ".txt");
+    saveAs(acc, "Acceleration  " + T + ".txt");
     const ori = new Blob(O, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(ori, "orientation" + T + ".txt");
+    saveAs(ori, "orientation  " + T + ".txt");
 
 });
 
