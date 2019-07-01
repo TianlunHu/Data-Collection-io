@@ -188,7 +188,7 @@ function StartSensor() {
         document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
     }
 
-    function (eventData, t) {
+    function deviceOrientationHandler(eventData, t) {
         var tiltLR = eventData.gamma;
         var tiltFB = eventData.beta;
         var dir = eventData.alpha;
