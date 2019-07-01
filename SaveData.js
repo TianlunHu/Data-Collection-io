@@ -28,7 +28,7 @@ recordButton.addEventListener('click', () => {
 const playButton = document.querySelector('button#play');
 playButton.addEventListener('click', () => {
     const superBuffer = new Blob(recordedBlobs, {
-        type: 'video/webm'
+        type: 'video/mp4'
     });
     recordedVideo.src = null;
     recordedVideo.srcObject = null;
@@ -64,13 +64,13 @@ downloadButton.addEventListener('click', () => {
     T.format('yyyy-MM-dd');
     //Save Sequence as Vodeo
     const blob = new Blob(recordedBlobs, {
-        type: 'video/webm'
+        type: 'video/mp4'
     });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = 'Sequence ' + T + '.webm';
+    a.download = 'Sequence ' + T + '.mp4';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -100,7 +100,7 @@ downloadButton.addEventListener('click', () => {
 
 function handleSourceOpen(event) {
     console.log('MediaSource opened');
-    sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+    sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="vp8"');
     console.log('Source buffer: ', sourceBuffer);
 }
 
@@ -113,19 +113,19 @@ function handleDataAvailable(event) {
 function startRecording() {
     recordedBlobs = [];
     let options = {
-        mimeType: 'video/webm;codecs=vp9'
+        mimeType: 'video/mp4;codecs=vp9'
     };
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
         console.error(`${options.mimeType} is not Supported`);
         errorMsgElement.innerHTML = `${options.mimeType} is not Supported`;
         options = {
-            mimeType: 'video/webm;codecs=vp8'
+            mimeType: 'video/mp4;codecs=vp8'
         };
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
             console.error(`${options.mimeType} is not Supported`);
             errorMsgElement.innerHTML = `${options.mimeType} is not Supported`;
             options = {
-                mimeType: 'video/webm'
+                mimeType: 'video/mp4'
             };
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 console.error(`${options.mimeType} is not Supported`);
@@ -153,7 +153,7 @@ function startRecording() {
         console.log('Recorder stopped: ', event);
     };
     mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(); // collect 10ms of data
+    mediaRecorder.start(10); // collect 10ms of data
     console.log('MediaRecorder started', mediaRecorder);
 }
 
