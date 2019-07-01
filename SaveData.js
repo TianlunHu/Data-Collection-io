@@ -173,7 +173,9 @@ var rotVec = [];
 var OriVec = [];
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-
+    AccVec = [];
+    rotVec = [];
+    OriVec = [];
     //----------------- Orientation Sensor -------------- //
     if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
