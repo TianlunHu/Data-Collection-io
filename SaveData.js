@@ -57,20 +57,41 @@ downloadButton.addEventListener('click', () => {
     const R = rotVec;
     const A = AccVec;
     const O = OriVec;
-    const T = Date.toLocaleTimeString();
+
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(), //day
+            "h+": this.getHours(), //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+            (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(format))
+                format = format.replace(RegExp.$1,
+                    RegExp.$1.length == 1 ? o[k] :
+                    ("00" + o[k]).substr(("" + o[k]).length));
+        return format;
+    }
+    const T = new Date();
+    T.format('yyyy-MM-dd');
 
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(rot, "Rotation"+T+".txt");
+    saveAs(rot, "Rotation" + T + ".txt");
     const acc = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(acc, "Acceleration"+T+".txt");
+    saveAs(acc, "Acceleration" + T + ".txt");
     const ori = new Blob(O, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(ori, "orientation"+T+".txt");
+    saveAs(ori, "orientation" + T + ".txt");
 
 });
 
@@ -172,6 +193,7 @@ async function init(constraints) {
 var AccVec = [];
 var rotVec = [];
 var OriVec = [];
+
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
     AccVec = [];
@@ -190,7 +212,7 @@ function StartSensor() {
         var dir = eventData.alpha;
         var info, xyz = "[t, X, Y, Z]";
 
-        info = xyz.replace("t", Date.now()/1000);
+        info = xyz.replace("t", Date.now() / 1000);
         info = info.replace("X", Math.round(tiltLR));
         info = info.replace("Y", Math.round(tiltFB));
         info = info.replace("Z", Math.round(dir));
@@ -278,14 +300,14 @@ function StartSensor() {
             lastReadingTimestamp = accelerometer.timestamp;
 
             document.getElementById("timeStamp").innerHTML = accelerometer.timestamp;
-            accelerationHandler(accelerometer, AccVec, Date.now()/1000);
+            accelerationHandler(accelerometer, AccVec, Date.now() / 1000);
         });
 
         gyroscope.addEventListener('reading', e => rotationHandler({
             alpha: gyroscope.x,
             beta: gyroscope.y,
             gamma: gyroscope.z
-        }, rotVec, Date.now()/1000));
+        }, rotVec, Date.now() / 1000));
 
         /*orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, OriVec, orientator.timestamp));*/
 
