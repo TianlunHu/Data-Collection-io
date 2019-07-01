@@ -203,11 +203,11 @@ function StartSensor() {
     rotVec = [];
     OriVec = [];
     //----------------- Orientation Sensor -------------- //
-    if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
+    /*if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
     } else {
         document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
-    }
+    }*/
 
     function deviceOrientationHandler(eventData) {
         var tiltLR = eventData.gamma;
@@ -281,8 +281,9 @@ function StartSensor() {
         document.getElementById("moInterval").innerHTML = interval;
     }
 
-    if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
+    if ('LinearAccelerationSensor' in window && 'Gyroscope' in window && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
+        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
         let lastReadingTimestamp;
         let accelerometer = new LinearAccelerationSensor({
             frequency: 30
@@ -330,6 +331,7 @@ function StartSensor() {
 
         window.addEventListener('devicemotion', onDeviceMotion, false);
     } else {
+        document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
         document.getElementById('moApi').innerHTML = 'No Sensors API available';
         document.getElementById("moRotation").innerHTML = '[x,y,z]';
     }
