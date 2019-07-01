@@ -168,12 +168,11 @@ async function init(constraints) {
     }
 }
 
-
+var AccVec = [];
+var rotVec = [];
+var OriVec = [];
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-    var AccVec = [];
-    var rotVec = [];
-    var OriVec = [];
 
     //----------------- Orientation Sensor -------------- //
     if ('DeviceOrientationEvent' in window) {
@@ -188,8 +187,8 @@ function StartSensor() {
         var dir = eventData.alpha;
         var info, xyz = "[t, X, Y, Z]";
 
-        info = xyz.replace("t", Date.now());
-        info = xyz.replace("X", Math.round(tiltLR));
+        info = xyz.replace("t", Date.now()/1000);
+        info = info.replace("X", Math.round(tiltLR));
         info = info.replace("Y", Math.round(tiltFB));
         info = info.replace("Z", Math.round(dir));
         document.getElementById('orSen').innerHTML = info;
@@ -276,14 +275,14 @@ function StartSensor() {
             lastReadingTimestamp = accelerometer.timestamp;
 
             document.getElementById("timeStamp").innerHTML = accelerometer.timestamp;
-            accelerationHandler(accelerometer, AccVec, Date.now());
+            accelerationHandler(accelerometer, AccVec, Date.now()/1000);
         });
 
         gyroscope.addEventListener('reading', e => rotationHandler({
             alpha: gyroscope.x,
             beta: gyroscope.y,
             gamma: gyroscope.z
-        }, rotVec, Date.now()));
+        }, rotVec, Date.now()/1000));
 
         /*orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, OriVec, orientator.timestamp));*/
 
