@@ -65,8 +65,8 @@ downloadButton.addEventListener('click', () => {
             "h+": this.getHours(), //hour
             "m+": this.getMinutes(), //minute
             "s+": this.getSeconds(), //second
-            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
-            "S": this.getMilliseconds() //millisecond
+            //"q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            //"S": this.getMilliseconds() //millisecond
         }
         if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
             (this.getFullYear() + "").substr(4 - RegExp.$1.length));
