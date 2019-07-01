@@ -175,19 +175,26 @@ function StartSensor() {
     ////////////////////////////////////////////////////////////////
 
     //----------------- Orientation Sensor -------------- //
-    if ('DeviceOrientationEvent' in window) {
-        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+    if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
+        //window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+        let orientator = new AbsoluteOrientationSensor({
+            frequency : 30
+        });
+        orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, Date.now()/1000));
+        
+        orientator.start();
+        
     } else {
         document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
     }
 
-    function deviceOrientationHandler(eventData) {
+    function (eventData, t) {
         var tiltLR = eventData.gamma;
         var tiltFB = eventData.beta;
         var dir = eventData.alpha;
         var info, xyz = "[t, X, Y, Z]";
 
-        info = xyz.replace("t", Date.now()/1000);
+        info = xyz.replace("t", t);
         info = info.replace("X", Math.round(tiltLR));
         info = info.replace("Y", Math.round(tiltFB));
         info = info.replace("Z", Math.round(dir));
