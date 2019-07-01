@@ -176,25 +176,18 @@ function StartSensor() {
 
     //----------------- Orientation Sensor -------------- //
     if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
-        //window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-        let orientator = new AbsoluteOrientationSensor({
-            frequency : 30
-        });
-        orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, Date.now()/1000));
-        
-        orientator.start();
-        
+        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
     } else {
         document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
     }
 
-    function deviceOrientationHandler(eventData, t) {
+    function deviceOrientationHandler(eventData) {
         var tiltLR = eventData.gamma;
         var tiltFB = eventData.beta;
         var dir = eventData.alpha;
         var info, xyz = "[t, X, Y, Z]";
 
-        info = xyz.replace("t", t);
+        info = xyz.replace("t", Date.now()/1000);
         info = info.replace("X", Math.round(tiltLR));
         info = info.replace("Y", Math.round(tiltFB));
         info = info.replace("Z", Math.round(dir));
@@ -207,7 +200,7 @@ function StartSensor() {
 
         var logo = document.getElementById("imgLogo");
         logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-        logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
+        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
         logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
     }
     //----------------Motion Sensors (IMU) ---------------- //
