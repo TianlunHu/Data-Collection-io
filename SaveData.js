@@ -57,19 +57,20 @@ downloadButton.addEventListener('click', () => {
     const R = rotVec;
     const A = AccVec;
     const O = OriVec;
+    const T = Date.toLocaleTimeString();
 
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(rot, "Rotation.txt");
+    saveAs(rot, "Rotation"+T+".txt");
     const acc = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(acc, "Acceleration.txt");
+    saveAs(acc, "Acceleration"+T+".txt");
     const ori = new Blob(O, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(ori, "orientation.txt");
+    saveAs(ori, "orientation"+T+".txt");
 
 });
 
