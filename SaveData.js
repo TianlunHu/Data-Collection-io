@@ -85,11 +85,11 @@ downloadButton.addEventListener('click', () => {
     const O = OriVec;
     const TiSt = TsVec;
     
-    const times = new Blob(TiSt, {
+    /*const times = new Blob(TiSt, {
         type: "text/plain;charset=utf-8"
     });
     saveAs(times, "TimeStamp  " + T + ".txt");
-    
+    */
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
