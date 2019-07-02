@@ -213,7 +213,7 @@ function StartSensor() {
     ////////////////////////////////////////////////////////////////
     AccVec = [];
     rotVec = [];
-    vOriVec = [];
+    OriVec = [];
     TsVec = [];
     //----------------- Orientation Sensor -------------- //
 
