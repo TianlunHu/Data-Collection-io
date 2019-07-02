@@ -83,7 +83,14 @@ downloadButton.addEventListener('click', () => {
     const R = rotVec;
     const A = AccVec;
     const O = OriVec;
-
+    const TiSt = TS;
+    
+    const times = new Blob(TiSt, {
+        type: "text/plain;charset=utf-8"
+    });
+    saveAs(times, "Rotation  " + T + ".txt");
+    
+    
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
@@ -197,18 +204,14 @@ async function init(constraints) {
     }
 }
 
-var AccVec = [];
-var rotVec = [];
-var OriVec = [];
+var AccVec, rotVec, OriVec, TS = [];
 let accelerometer;
 let gyroscope;
 let orientator;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-    AccVec = [];
-    rotVec = [];
-    OriVec = [];
+    AccVec, rotVec, OriVec, TS = [];
     //----------------- Orientation Sensor -------------- //
 
     function deviceOrientationHandler(eventData) {
@@ -222,12 +225,12 @@ function StartSensor() {
         document.getElementById("doDirection").innerHTML = Math.round(dir);
 
         var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-        logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
     }
     //----------------Motion Sensors (IMU) ---------------- //
-    function OrientationHandler(orientation, OV, t) {
+    function OrientationHandler(orientation, OV) {
         let info, abcd = "[A, B, C, D]";
         let Q = orientation.quaternion;
 
@@ -239,10 +242,10 @@ function StartSensor() {
         OV.push(info);
     }
 
-    function accelerationHandler(acceleration, AV, t) {
-        var info, xyz = "[t, X, Y, Z]";
-        info = xyz.replace("t", t);
-        info = info.replace("X", acceleration.x && acceleration.x.toFixed(3));
+    function accelerationHandler(acceleration, AV) {
+        var info, xyz = "[X, Y, Z]";
+        
+        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
         info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
         document.getElementById('moAccel').innerHTML = info;
@@ -251,24 +254,23 @@ function StartSensor() {
     }
 
     function rotationHandler(rotation, RV, t) {
-        var info, xyz = "[t, X, Y, Z]";
-        info = xyz.replace("t", t);
-        info = info.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
+        var info, xyz = "[X, Y, Z]";
+        info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
         info = info.replace("Y", rotation.beta && rotation.beta.toFixed(3));
         info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
         document.getElementById("moRotation").innerHTML = info;
         RV.push(info);
-        /*document.getElementById('RotSequence').innerHTML = RV;*/
+        document.getElementById("timeStamp").innerHTML = t;
+        TS.push(t);
     }
 
-    function intervalHandler(interval) {
+    /*function intervalHandler(interval) {
         document.getElementById("moInterval").innerHTML = interval;
-    }
+    }*/
 
     if ('LinearAccelerationSensor' in window && 'Gyroscope' in window && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-        let lastReadingTimestamp;
         accelerometer = new LinearAccelerationSensor({
             frequency: 30
         });
@@ -284,13 +286,7 @@ function StartSensor() {
         });*/
 
         accelerometer.addEventListener('reading', e => {
-            if (lastReadingTimestamp) {
-                intervalHandler(Math.round(accelerometer.timestamp - lastReadingTimestamp));
-            }
-            lastReadingTimestamp = accelerometer.timestamp;
-
-            document.getElementById("timeStamp").innerHTML = accelerometer.timestamp;
-            accelerationHandler(accelerometer, AccVec, Date.now() / 1000);
+            accelerationHandler(accelerometer, AccVec);
         });
 
         gyroscope.addEventListener('reading', e => rotationHandler({
@@ -299,7 +295,7 @@ function StartSensor() {
             gamma: gyroscope.z
         }, rotVec, Date.now() / 1000));
 
-        orientator.addEventListener('reading', e => OrientationHandler(orientator, OriVec, orientator.timestamp));
+        orientator.addEventListener('reading', e => OrientationHandler(orientator, OriVec));
 
         accelerometer.start();
         gyroscope.start();
@@ -310,7 +306,6 @@ function StartSensor() {
 
         var onDeviceMotion = function (eventData) {
             accelerationHandler(eventData.acceleration, 'moAccel');
-            accelerationHandler(eventData.accelerationIncludingGravity, 'moAccelGrav');
             rotationHandler(eventData.rotationRate);
             intervalHandler(eventData.interval);
         }

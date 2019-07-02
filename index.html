@@ -106,18 +106,33 @@
                 <td id="timeStamp">Current Time</td>
             </tr>
             <tr>
-                <td>linear acceleration (excl. gravity)</td>
-                <td id="moAccel">No Accelermeter</td>
+                <td>Pose Vector</td>
+                <td id="orSen">No Pose Sensor</td>
             </tr>
             <tr>
-                <td>acceleration incl. gravity</td>
-                <td id="moAccelGrav">No Acc-meter with G</td>
+                <td>linear acceleration</td>
+                <td id="moAccel">No Accelermeter</td>
             </tr>
             <tr>
                 <td>rotation rate</td>
                 <td id="moRotation">No Gyroscope</td>
             </tr>
+
+        </table>
+
+        <table border="1">
             <tr>
+                <td>Tilt Left/Right [gamma]</td>
+                <td>Tilt Front/Back [beta]</td>
+                <td>Direction [alpha]</td>
+            </tr>
+            <tr>
+                <td id="doTiltLR">No Tilt</td>
+                <td id="doTiltFB">No Tilt</td>
+                <td id="doDirection">No Tilt</td>
+            </tr>
+            
+            <!--<tr>
                 <td>Tilt Left/Right [gamma]</td>
                 <td id="doTiltLR">No Tilt</td>
             </tr>
@@ -128,17 +143,9 @@
             <tr>
                 <td>Direction [alpha]</td>
                 <td id="doDirection">No Tilt</td>
-            </tr>
-            <tr>
-                <td>Pose Vector</td>
-                <td id="orSen">No Pose Sensor</td>
-            </tr>
-            <tr>
-                <td>interval (ms)</td>
-                <td id="moInterval">Infinity</td>
-            </tr>
+            </tr>-->
         </table>
-        
+
         <div class="container" id="logoContainer">
             <img src="camera.png" id="imgLogo">
         </div>
@@ -160,8 +167,8 @@
 
     <!--<script src="Sensor3.0.js"></script>-->
     <script src="Network.js"></script>
-    <!--<script src="SaveStream.js"></script>-->
-    <script src="SaveData.js"></script>
+    <script src="SaveStream.js"></script>
+    <!--<script src="SaveData.js"></script>-->
     <script src="CamSelect.js"></script>
 
     <script src="FileSaver.js"></script>
