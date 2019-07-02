@@ -7,6 +7,7 @@ let mediaRecorder;
 let recordedBlobs;
 let sourceBuffer;
 
+
 const errorMsgElement = document.querySelector('span#errorMsg');
 const recordedVideo = document.querySelector('video#recorded');
 const recordButton = document.querySelector('button#record');
@@ -59,7 +60,7 @@ downloadButton.addEventListener('click', () => {
                     ("00" + o[k]).substr(("" + o[k]).length));
         return format;
     }
-    
+
     const T = new Date();
     T.format('yyyy-MM-dd');
     //Save Sequence as Vodeo
@@ -77,7 +78,7 @@ downloadButton.addEventListener('click', () => {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }, 100);
-    
+
     //Save Sensor Date as .txt
     const R = rotVec;
     const A = AccVec;
@@ -159,6 +160,8 @@ function startRecording() {
 
 function stopRecording() {
     mediaRecorder.stop();
+    accelerometer.stop();
+    gyroscope.stop();
     console.log('Recorded Blobs: ', recordedBlobs);
 }
 
@@ -196,6 +199,8 @@ async function init(constraints) {
 var AccVec = [];
 var rotVec = [];
 var OriVec = [];
+let accelerometer;
+let gyroscope;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
@@ -203,11 +208,6 @@ function StartSensor() {
     rotVec = [];
     OriVec = [];
     //----------------- Orientation Sensor -------------- //
-    /*if ('DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
-        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-    } else {
-        document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
-    }*/
 
     function deviceOrientationHandler(eventData) {
         var tiltLR = eventData.gamma;
@@ -215,45 +215,27 @@ function StartSensor() {
         var dir = eventData.alpha;
         var info, xyz = "[t, X, Y, Z]";
 
-        info = xyz.replace("t", Date.now() / 1000);
-        info = info.replace("X", Math.round(tiltLR));
-        info = info.replace("Y", Math.round(tiltFB));
-        info = info.replace("Z", Math.round(dir));
-        document.getElementById('orSen').innerHTML = info;
-        OriVec.push(info);
-
         document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
         document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
         document.getElementById("doDirection").innerHTML = Math.round(dir);
 
         var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
-        logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
     }
     //----------------Motion Sensors (IMU) ---------------- //
-    /*function deviceOrientationHandler(orientation, OV, t) {
-      var tiltLR = orientation.gamma;
-      var tiltFB = orientation.beta;
-      var dir = orientation.alpha;
-      var info, xyz = "[t, X, Y, Z]";
-      
-      info = xyz.replace("t", t);
-      info = info.replace("X", Math.round(tiltLR));
-      info = info.replace("Y", Math.round(tiltFB));
-      info = info.replace("Z", Math.round(dir));
-      document.getElementById('orSen').innerHTML = info;
-      OV.push(info);
-        
-      document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-      document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-      document.getElementById("doDirection").innerHTML = Math.round(dir);
+    function OrientationHandler(orientation, OV, t) {
+        let info, abcd = "[A, B, C, D]";
+        let Q = orientation.quaternion;
 
-      var logo = document.getElementById("imgLogo");
-      logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-      logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
-      logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-    }*/
+        info = abcd.replace("A", Q[0].toFixed(3));
+        info = info.replace("B", Q[1].toFixed(3));
+        info = info.replace("C", Q[2].toFixed(3));
+        info = info.replace("D", Q[3].toFixed(3));
+        document.getElementById("orSen").innerHTML = info;
+        OV.push(info);
+    }
 
     function accelerationHandler(acceleration, AV, t) {
         var info, xyz = "[t, X, Y, Z]";
@@ -285,13 +267,15 @@ function StartSensor() {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
         let lastReadingTimestamp;
-        let accelerometer = new LinearAccelerationSensor({
+        accelerometer = new LinearAccelerationSensor({
             frequency: 30
         });
-        let gyroscope = new Gyroscope({
+        gyroscope = new Gyroscope({
             frequency: 30
         });
-        /*let orientator = new AbsoluteOrientationSensor({});*/
+        let orientator = new AbsoluteOrientationSensor({
+            frequency: 30
+        });
 
         /*document.addEventListener('load', e => {
             
@@ -313,11 +297,11 @@ function StartSensor() {
             gamma: gyroscope.z
         }, rotVec, Date.now() / 1000));
 
-        /*orientator.addEventListener('reading', e => deviceOrientationHandler(orientator, OriVec, orientator.timestamp));*/
+        orientator.addEventListener('reading', e => OrientationHandler(orientator, OriVec, orientator.timestamp));
 
         accelerometer.start();
         gyroscope.start();
-        /*orientator.start();*/
+        orientator.start();
 
     } else if ('DeviceMotionEvent' in window) {
         document.getElementById('moApi').innerHTML = 'Device Motion Event';
