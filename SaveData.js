@@ -203,14 +203,20 @@ async function init(constraints) {
     }
 }
 
-var AccVec, rotVec, OriVec, TsVec = [];
+var AccVec = [];
+var rotVec = [];
+var OriVec = [];
+var TsVec = [];
 let accelerometer;
 let gyroscope;
 let orientator;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-    AccVec, rotVec, OriVec, TsVec = [];
+    var AccVec = [];
+    var rotVec = [];
+    var OriVec = [];
+    var TsVec = [];
     //----------------- Orientation Sensor -------------- //
 
     function deviceOrientationHandler(eventData) {
