@@ -90,7 +90,6 @@ downloadButton.addEventListener('click', () => {
     });
     saveAs(times, "Rotation  " + T + ".txt");
     
-    
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
@@ -253,15 +252,13 @@ function StartSensor() {
         /*document.getElementById('AccSequence').innerHTML = AV;*/
     }
 
-    function rotationHandler(rotation, RV, t) {
+    function rotationHandler(rotation, RV) {
         var info, xyz = "[X, Y, Z]";
         info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
         info = info.replace("Y", rotation.beta && rotation.beta.toFixed(3));
         info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
         document.getElementById("moRotation").innerHTML = info;
         RV.push(info);
-        document.getElementById("timeStamp").innerHTML = t;
-        TS.push(t);
     }
 
     /*function intervalHandler(interval) {
@@ -286,6 +283,9 @@ function StartSensor() {
         });*/
 
         accelerometer.addEventListener('reading', e => {
+            let current = Date.now() / 1000;
+            document.getElementById("timeStamp").innerHTML = current;
+            TS.push(current);
             accelerationHandler(accelerometer, AccVec);
         });
 
@@ -293,7 +293,7 @@ function StartSensor() {
             alpha: gyroscope.x,
             beta: gyroscope.y,
             gamma: gyroscope.z
-        }, rotVec, Date.now() / 1000));
+        }, rotVec));
 
         orientator.addEventListener('reading', e => OrientationHandler(orientator, OriVec));
 
