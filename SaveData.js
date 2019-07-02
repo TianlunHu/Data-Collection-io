@@ -88,7 +88,7 @@ downloadButton.addEventListener('click', () => {
     const times = new Blob(TiSt, {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(times, "Rotation  " + T + ".txt");
+    saveAs(times, "TimeStamp  " + T + ".txt");
     
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
@@ -285,7 +285,7 @@ function StartSensor() {
         accelerometer.addEventListener('reading', e => {
             let current = Date.now() / 1000;
             document.getElementById("timeStamp").innerHTML = current;
-            TsVec.push(current);
+            TsVec.push(current + ', ');
             accelerationHandler(accelerometer, AccVec);
         });
 
