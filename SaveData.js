@@ -7,17 +7,14 @@ let mediaRecorder;
 let recordedBlobs;
 let sourceBuffer;
 
-
 const errorMsgElement = document.querySelector('span#errorMsg');
 const recordedVideo = document.querySelector('video#recorded');
 const recordButton = document.querySelector('button#record');
-
 
 recordButton.addEventListener('click', () => {
     if (recordButton.textContent === 'Start Recording') {
         startRecording();
         StartSensor();
-
     } else {
         stopRecording();
         recordButton.textContent = 'Start Recording';
@@ -63,6 +60,7 @@ downloadButton.addEventListener('click', () => {
 
     const T = new Date();
     T.format('yyyy-MM-dd');
+    
     //Save Sequence as Vodeo
     const blob = new Blob(recordedBlobs, {
         type: 'video/webm'
@@ -85,11 +83,11 @@ downloadButton.addEventListener('click', () => {
     const O = OriVec;
     const TiSt = TsVec;
     
-    /*const times = new Blob(TiSt, {
+    const times = new Blob(TiSt, {
         type: "text/plain;charset=utf-8"
     });
     saveAs(times, "TimeStamp  " + T + ".txt");
-    */
+    
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
@@ -213,10 +211,10 @@ let orientator;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-    var AccVec = [];
-    var rotVec = [];
-    var OriVec = [];
-    var TsVec = [];
+    AccVec = [];
+    rotVec = [];
+    vOriVec = [];
+    TsVec = [];
     //----------------- Orientation Sensor -------------- //
 
     function deviceOrientationHandler(eventData) {
