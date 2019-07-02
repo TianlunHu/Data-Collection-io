@@ -162,6 +162,7 @@ function stopRecording() {
     mediaRecorder.stop();
     accelerometer.stop();
     gyroscope.stop();
+    orientator.stop();
     console.log('Recorded Blobs: ', recordedBlobs);
 }
 
@@ -201,6 +202,7 @@ var rotVec = [];
 var OriVec = [];
 let accelerometer;
 let gyroscope;
+let orientator;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
@@ -273,7 +275,7 @@ function StartSensor() {
         gyroscope = new Gyroscope({
             frequency: 30
         });
-        let orientator = new AbsoluteOrientationSensor({
+        orientator = new AbsoluteOrientationSensor({
             frequency: 30
         });
 
