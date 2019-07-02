@@ -83,7 +83,7 @@ downloadButton.addEventListener('click', () => {
     const R = rotVec;
     const A = AccVec;
     const O = OriVec;
-    const TiSt = TS;
+    const TiSt = TsVec;
     
     const times = new Blob(TiSt, {
         type: "text/plain;charset=utf-8"
@@ -203,14 +203,14 @@ async function init(constraints) {
     }
 }
 
-var AccVec, rotVec, OriVec, TS = [];
+var AccVec, rotVec, OriVec, TsVec = [];
 let accelerometer;
 let gyroscope;
 let orientator;
 
 function StartSensor() {
     ////////////////////////////////////////////////////////////////
-    AccVec, rotVec, OriVec, TS = [];
+    AccVec, rotVec, OriVec, TsVec = [];
     //----------------- Orientation Sensor -------------- //
 
     function deviceOrientationHandler(eventData) {
@@ -285,7 +285,7 @@ function StartSensor() {
         accelerometer.addEventListener('reading', e => {
             let current = Date.now() / 1000;
             document.getElementById("timeStamp").innerHTML = current;
-            TS.push(current);
+            TsVec.push(current);
             accelerationHandler(accelerometer, AccVec);
         });
 
