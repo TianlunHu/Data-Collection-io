@@ -8,7 +8,6 @@ let recordedBlobs;
 let sourceBuffer;
 
 const errorMsgElement = document.querySelector('span#errorMsg');
-const recordedVideo = document.querySelector('video#recorded');
 const recordButton = document.querySelector('button#record');
 
 recordButton.addEventListener('click', () => {
@@ -18,49 +17,16 @@ recordButton.addEventListener('click', () => {
     } else {
         stopRecording();
         recordButton.textContent = 'Start Recording';
-        playButton.disabled = false;
         downloadButton.disabled = false;
     }
-});
-
-const playButton = document.querySelector('button#play');
-playButton.addEventListener('click', () => {
-    const superBuffer = new Blob(recordedBlobs, {
-        type: 'video/webm'
-    });
-    recordedVideo.src = null;
-    recordedVideo.srcObject = null;
-    recordedVideo.src = window.URL.createObjectURL(superBuffer);
-    recordedVideo.controls = true;
-    recordedVideo.play();
 });
 
 const downloadButton = document.querySelector('button#download');
 downloadButton.addEventListener('click', () => {
     //Get Time for files' Name.
-    Date.prototype.format = function (format) {
-        var o = {
-            "M+": this.getMonth() + 1, //month
-            "d+": this.getDate(), //day
-            "h+": this.getHours(), //hour
-            "m+": this.getMinutes(), //minute
-            "s+": this.getSeconds(), //second
-            /*"q+": Math.floor((this.getMonth() + 3) / 3), //quarter
-            "S": this.getMilliseconds() //millisecond*/
-        }
-        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
-            (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(format))
-                format = format.replace(RegExp.$1,
-                    RegExp.$1.length == 1 ? o[k] :
-                    ("00" + o[k]).substr(("" + o[k]).length));
-        return format;
-    }
+    const date = new Date();
+    const T = date.getMonth() + 1 + '.' + date.getDate() + ' ' + date.getHours() + '-' + date.getMinutes() + '-' + date.getSeconds();
 
-    const T = new Date();
-    T.format('yyyy-MM-dd');
-    
     //Save Sequence as Vodeo
     const blob = new Blob(recordedBlobs, {
         type: 'video/webm'
@@ -82,12 +48,12 @@ downloadButton.addEventListener('click', () => {
     const A = AccVec;
     const O = OriVec;
     const TiSt = TsVec;
-    
+
     const times = new Blob(TiSt, {
         type: "text/plain;charset=utf-8"
     });
     saveAs(times, "TimeStamp  " + T + ".txt");
-    
+
     const rot = new Blob(R, {
         type: "text/plain;charset=utf-8"
     });
@@ -152,7 +118,6 @@ function startRecording() {
 
     console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
     recordButton.textContent = 'Stop Recording';
-    playButton.disabled = true;
     downloadButton.disabled = true;
     mediaRecorder.onstop = (event) => {
         console.log('Recorder stopped: ', event);
@@ -247,7 +212,7 @@ function StartSensor() {
 
     function accelerationHandler(acceleration, AV) {
         var info, xyz = "[X, Y, Z]";
-        
+
         info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
         info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
