@@ -166,16 +166,34 @@ async function init(constraints) {
     }
 }
 
+// ----------------------------------- Sensors ---------------------------------- //
 var AccVec = [];
 var rotVec = [];
 var OriVec = [];
 var TsVec = [];
 let accelerometer;
+let accLowPass;
 let gyroscope;
 let orientator;
 
+class LowPassFilterData {
+    constructor(reading, bias) {
+        Object.assign(this, {
+            x: reading.x,
+            y: reading.y,
+            z: reading.z
+        });
+        this.bias = bias;
+    }
+
+    update(reading) {
+        this.x = this.x * this.bias + reading.x * (1 - this.bias);
+        this.y = this.y * this.bias + reading.y * (1 - this.bias);
+        this.z = this.z * this.bias + reading.z * (1 - this.bias);
+    }
+};
+
 function StartSensor() {
-    ////////////////////////////////////////////////////////////////
     AccVec = [];
     rotVec = [];
     OriVec = [];
@@ -193,9 +211,9 @@ function StartSensor() {
         document.getElementById("doDirection").innerHTML = Math.round(dir);
 
         var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-        logo.style.MozTransform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-        logo.style.transform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
     }
     //----------------Motion Sensors (IMU) ---------------- //
     function OrientationHandler(orientation, OV) {
@@ -240,6 +258,8 @@ function StartSensor() {
         accelerometer = new LinearAccelerationSensor({
             frequency: 30
         });
+        accLowPass = new LowPassFilterData(accelerometer, 0.5);
+
         gyroscope = new Gyroscope({
             frequency: 30
         });
@@ -252,9 +272,7 @@ function StartSensor() {
         });*/
 
         accelerometer.addEventListener('reading', e => {
-            let current = Date.now() / 1000;
-            document.getElementById("timeStamp").innerHTML = current;
-            TsVec.push(current + ', ');
+            accLowPass.update(accelerometer);
             accelerationHandler(accelerometer, AccVec);
         });
 
@@ -264,7 +282,12 @@ function StartSensor() {
             gamma: gyroscope.z
         }, rotVec));
 
-        orientator.addEventListener('reading', e => OrientationHandler(orientator, OriVec));
+        orientator.addEventListener('reading', e => {
+            let current = Date.now() / 1000;
+            document.getElementById("timeStamp").innerHTML = current;
+            TsVec.push(current + ', ');
+            OrientationHandler(orientator, OriVec)
+        });
 
         accelerometer.start();
         gyroscope.start();
