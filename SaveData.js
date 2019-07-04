@@ -258,7 +258,7 @@ function StartSensor() {
         accelerometer = new LinearAccelerationSensor({
             frequency: 30
         });
-        accLowPass = new LowPassFilterData(accelerometer, 0.9);
+        accLowPass = new LowPassFilterData(accelerometer, 0.8);
 
         gyroscope = new Gyroscope({
             frequency: 30
