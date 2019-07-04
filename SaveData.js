@@ -193,9 +193,9 @@ function StartSensor() {
         document.getElementById("doDirection").innerHTML = Math.round(dir);
 
         var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + (tiltLR + 90) + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + (tiltLR + 90) + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
-        logo.style.transform = "rotate(" + (tiltLR + 90) + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
+        logo.style.webkitTransform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.MozTransform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+        logo.style.transform = "rotate(" + (tiltLR) + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
     }
     //----------------Motion Sensors (IMU) ---------------- //
     function OrientationHandler(orientation, OV) {
