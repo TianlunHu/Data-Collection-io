@@ -243,7 +243,7 @@ function StartSensor() {
         
         var logo = document.getElementById("imgLogo");
         logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + (theta-) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
         logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
     }
 
