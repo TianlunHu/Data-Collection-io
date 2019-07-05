@@ -231,9 +231,9 @@ function StartSensor() {
     function accelerationHandler(acceleration, AV) {
         var info, xyz = "[X, Y, Z]";
 
-        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(1));
-        info = info.replace("Y", acceleration.y && acceleration.y.toFixed(1));
-        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(1));
+        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(0));
+        info = info.replace("Y", acceleration.y && acceleration.y.toFixed(0));
+        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(0));
         AV.push(info);
         document.getElementById('moAccel').innerHTML = info;
     }
