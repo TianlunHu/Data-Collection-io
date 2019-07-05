@@ -176,6 +176,10 @@ let accLowPass;
 let gyroscope;
 let orientator;
 
+function calcAngleDegrees(x, y) {
+  return Math.atan2(x, y) * 180 / Math.PI;
+}
+
 class LowPassFilterData {
     constructor(reading, bias) {
         Object.assign(this, {
@@ -219,11 +223,21 @@ function StartSensor() {
     function OrientationHandler(orientation, OV) {
         let info, abcd = "[A, B, C, D]";
         let Q = orientation.quaternion;
+        let x = Q[0];
+        let y = Q[1];
+        let z = Q[2];
+        let w = Q[3];
+        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y));
+        let theta = Math.asin(2*(w*y-z*x)) * 180 / Math.PI;
+        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z));
+        document.getElementById("phi").innerHTML = phi;
+        document.getElementById("theta").innerHTML = theta;
+        document.getElementById("psi").innerHTML = psi;
 
-        info = abcd.replace("A", Q[0].toFixed(3));
-        info = info.replace("B", Q[1].toFixed(3));
-        info = info.replace("C", Q[2].toFixed(3));
-        info = info.replace("D", Q[3].toFixed(3));
+        info = abcd.replace("A", x.toFixed(3));
+        info = info.replace("B", y.toFixed(3));
+        info = info.replace("C", z.toFixed(3));
+        info = info.replace("D", w.toFixed(3));
         document.getElementById("orSen").innerHTML = info;
         OV.push(info);
     }
