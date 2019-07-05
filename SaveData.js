@@ -255,9 +255,9 @@ function StartSensor() {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
         accelerometer = new LinearAccelerationSensor({
-            /*frequency: 30*/
+            frequency: 30
         });
-        accLowPass = new LowPassFilterData(accelerometer, 0.95);
+        accLowPass = new LowPassFilterData(accelerometer, 0.85);
 
         gyroscope = new Gyroscope({
             frequency: 30
