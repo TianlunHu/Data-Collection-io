@@ -231,11 +231,18 @@ function StartSensor() {
     function accelerationHandler(acceleration, AV) {
         var info, xyz = "[X, Y, Z]";
 
-        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
+        /*info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
-        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
-        document.getElementById('moAccel').innerHTML = info;
+        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));*/
+        info = xyz.replace("X", acceleration.x);
+        info = info.replace("Y", acceleration.y);
+        info = info.replace("Z", acceleration.z);
         AV.push(info);
+        info[0].toFixed(3);
+        info[1].toFixed(3);
+        info[2].toFixed(3);
+        document.getElementById('moAccel').innerHTML = info;
+        
         /*document.getElementById('AccSequence').innerHTML = AV;*/
     }
 
