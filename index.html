@@ -79,7 +79,6 @@
         <h2> Take Frame and Record Video with Button </h2>
 
         <video id="gum" playsinline autoplay muted></video>
-        <video id="recorded" playsinline loop></video>
 
         <br />
         <div class="select">
@@ -88,7 +87,6 @@
         <br />
 
         <button id="record">Start Recording</button>
-        <button id="play" disabled>Play</button>
         <button id="download" disabled>Download</button>
         <p>Echo cancellation: <input type="checkbox" id="echoCancellation"></p>
         <span id="errorMsg"></span>
@@ -131,19 +129,16 @@
                 <td id="doTiltFB">No Tilt</td>
                 <td id="doDirection">No Tilt</td>
             </tr>
-            
-            <!--<tr>
-                <td>Tilt Left/Right [gamma]</td>
-                <td id="doTiltLR">No Tilt</td>
+            <tr>
+                <td>Roll[Phi]</td>
+                <td>Pitch[Theta]</td>
+                <td>Yaw[Psi]</td>
             </tr>
             <tr>
-                <td>Tilt Front/Back [beta]</td>
-                <td id="doTiltFB">No Tilt</td>
+                <td id="phi">No Tilt</td>
+                <td id="theta">No Tilt</td>
+                <td id="psi">No Tilt</td>
             </tr>
-            <tr>
-                <td>Direction [alpha]</td>
-                <td id="doDirection">No Tilt</td>
-            </tr>-->
         </table>
 
         <div class="container" id="logoContainer">
