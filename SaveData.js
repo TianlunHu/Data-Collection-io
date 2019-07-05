@@ -238,9 +238,9 @@ function StartSensor() {
         info = info.replace("Y", acceleration.y);
         info = info.replace("Z", acceleration.z);
         AV.push(info);
-        info[0].toFixed(3);
+        /*info[0].toFixed(3);
         info[1].toFixed(3);
-        info[2].toFixed(3);
+        info[2].toFixed(3);*/
         document.getElementById('moAccel').innerHTML = info;
         
         /*document.getElementById('AccSequence').innerHTML = AV;*/
