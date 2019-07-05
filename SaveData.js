@@ -227,9 +227,9 @@ function StartSensor() {
         let y = Q[1];
         let z = Q[2];
         let w = Q[3];
-        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y)) + 180;
-        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI) + 90;
-        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z)) + 180;
+        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y));
+        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI);
+        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z));
         document.getElementById("phi").innerHTML = phi.toFixed(0);
         document.getElementById("theta").innerHTML = theta.toFixed(0);
         document.getElementById("psi").innerHTML = psi.toFixed(0);
@@ -242,9 +242,9 @@ function StartSensor() {
         OV.push(info);
         
         var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
-        logo.style.transform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
+        logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + (theta-) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
+        logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
     }
 
     function accelerationHandler(acceleration, AV) {
