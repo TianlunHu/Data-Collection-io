@@ -204,7 +204,7 @@ function StartSensor() {
     TsVec = [];
     //----------------- Orientation Sensor -------------- //
 
-    function deviceOrientationHandler(eventData) {
+    /*function deviceOrientationHandler(eventData) {
         var tiltLR = eventData.gamma;
         var tiltFB = eventData.beta;
         var dir = eventData.alpha;
@@ -218,7 +218,7 @@ function StartSensor() {
         logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
         logo.style.MozTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
         logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1 + 90) + "deg)";
-    }
+    }*/
     //----------------Motion Sensors (IMU) ---------------- //
     function OrientationHandler(orientation, OV) {
         let info, abcd = "[A, B, C, D]";
@@ -227,9 +227,9 @@ function StartSensor() {
         let y = Q[1];
         let z = Q[2];
         let w = Q[3];
-        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y)).toFixed(0);
-        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI).toFixed(0);
-        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z)).toFixed(0);
+        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y)).toFixed(0) + 180;
+        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI).toFixed(0) + 90;
+        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z)).toFixed(0) + 180;
         document.getElementById("phi").innerHTML = phi;
         document.getElementById("theta").innerHTML = theta;
         document.getElementById("psi").innerHTML = psi;
@@ -240,6 +240,11 @@ function StartSensor() {
         info = info.replace("D", w.toFixed(3));
         document.getElementById("orSen").innerHTML = info;
         OV.push(info);
+        
+        var logo = document.getElementById("imgLogo");
+        logo.style.webkitTransform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
+        logo.style.transform = "rotate(" + (theta-90) + "deg) rotate3d(1,0,0, " + ((phi-180) * -1 + 90) + "deg)";
     }
 
     function accelerationHandler(acceleration, AV) {
@@ -267,7 +272,7 @@ function StartSensor() {
 
     if ('LinearAccelerationSensor' in window && 'Gyroscope' in window && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
-        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+        /*window.addEventListener('deviceorientation', deviceOrientationHandler, false);*/
         accelerometer = new LinearAccelerationSensor({
             frequency: 30
         });
