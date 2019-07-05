@@ -227,12 +227,12 @@ function StartSensor() {
         let y = Q[1];
         let z = Q[2];
         let w = Q[3];
-        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y)).toFixed(0) + 180;
-        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI).toFixed(0) + 90;
-        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z)).toFixed(0) + 180;
-        document.getElementById("phi").innerHTML = phi;
-        document.getElementById("theta").innerHTML = theta;
-        document.getElementById("psi").innerHTML = psi;
+        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y)) + 180;
+        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI) + 90;
+        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z)) + 180;
+        document.getElementById("phi").innerHTML = phi.toFixed(0);
+        document.getElementById("theta").innerHTML = theta.toFixed(0);
+        document.getElementById("psi").innerHTML = psi.toFixed(0);
 
         info = abcd.replace("A", x.toFixed(3));
         info = info.replace("B", y.toFixed(3));
