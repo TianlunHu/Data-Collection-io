@@ -174,6 +174,7 @@ var TsVec = [];
 let accelerometer;
 let accLowPass;
 let gyroscope;
+let gyroHighPass;
 let orientator;
 
 function calcAngleDegrees(x, y) {
