@@ -236,10 +236,10 @@ function StartSensor() {
         document.getElementById("theta").innerHTML = theta.toFixed(0);
         document.getElementById("psi").innerHTML = psi.toFixed(0);
 
-        info = abcd.replace("A", x.toFixed(3));
-        info = info.replace("B", y.toFixed(3));
-        info = info.replace("C", z.toFixed(3));
-        info = info.replace("D", w.toFixed(3));
+        info = abcd.replace("A", x.toFixed(1));
+        info = info.replace("B", y.toFixed(1));
+        info = info.replace("C", z.toFixed(1));
+        info = info.replace("D", w.toFixed(1));
         document.getElementById("orSen").innerHTML = info;
         OV.push(info);
         
@@ -252,9 +252,9 @@ function StartSensor() {
     function accelerationHandler(acceleration, AV) {
         var info, xyz = "[X, Y, Z]";
 
-        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
-        info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
-        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
+        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(1));
+        info = info.replace("Y", acceleration.y && acceleration.y.toFixed(1));
+        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(1));
         AV.push(info);
         document.getElementById('moAccel').innerHTML = info;
     }
