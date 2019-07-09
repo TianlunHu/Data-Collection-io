@@ -279,7 +279,7 @@ function StartSensor() {
 //        accLowPass = new LowPassFilterData(accHighPass, 0.85);
         
         accLowPass = new LowPassFilterData(accelerometer, 0.85);
-        accHighPass = new HighPassFilterData(accLowPassr, 0.8);
+        accHighPass = new HighPassFilterData(accLowPass, 0.8);
 
         gyroscope = new Gyroscope({
             frequency: 200
