@@ -207,7 +207,7 @@ class HighPassFilterData {
   }
 
   update(reading) {
-    let dt = reading.timestamp - this.timestamp / 1000;
+    let dt = reading.timestamp / 1000 - this.timestamp / 1000;
     this.timestamp = reading.timestamp;
 
     for (let i of ["x", "y", "z"]) {
