@@ -173,6 +173,7 @@ var OriVec = [];
 var TsVec = [];
 let accelerometer;
 let accLowPass;
+let accHighPass;
 let gyroscope;
 let gyroHighPass;
 let orientator;
@@ -274,7 +275,8 @@ function StartSensor() {
         accelerometer = new LinearAccelerationSensor({
             frequency: 200
         });
-        accLowPass = new LowPassFilterData(accelerometer, 0.85);
+        accHighPass = new HighPassFilterData(accelerometer, 0.8);
+        accLowPass = new LowPassFilterData(accHighPass, 0.85);
 
         gyroscope = new Gyroscope({
             frequency: 200
@@ -286,7 +288,8 @@ function StartSensor() {
         });
 
         accelerometer.addEventListener('reading', e => {
-            accLowPass.update(accelerometer);
+            accHighPass.update(accelerometer);
+            accLowPass.update(accHighPass);
             accelerationHandler(accLowPass, AccVec);
         });
 
