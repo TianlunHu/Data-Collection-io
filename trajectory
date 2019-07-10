@@ -1,0 +1,187 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+
+def quaternion_rotation(p, q):
+    def quaternion_multiply(quaternion1, quaternion0):
+        x0, y0, z0, w0 = quaternion0
+        x1, y1, z1, w1 = quaternion1
+        return np.array([x1 * w0 + y1 * z0 - z1 * y0 + w1 * x0,
+                         -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
+                         x1 * y0 - y1 * x0 + z1 * w0 + w1 * z0,
+                         -x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0])
+    def quaternion_inverse(quaternion):
+        x0, y0, z0, w0 = quaternion
+        # l = np.sqrt(x0*x0 + y0*y0 + z0*z0 + w0*w0)
+        return np.array([-x0, -y0, -z0, w0])
+
+    q_p = quaternion_multiply(q, p)
+    q_inv = quaternion_inverse(q)
+
+    return quaternion_multiply(q_p, q_inv)
+
+# ---------------- Load Data Sources --------------- #
+
+
+accBiasSource = 'Acceleration7.7.txt'
+accBiasData = np.loadtxt(accBiasSource)
+N_accBiasData = int(accBiasData.shape[0]/3)
+accBiasData = accBiasData.reshape((N_accBiasData, 3))
+accBias = np.average(accBiasData, axis=0)
+print(accBias)
+
+quaterSource = 'orientation7.7.txt'
+quaterData = np.loadtxt(quaterSource)
+N_quater = int(quaterData.shape[0]/4)
+quaterData = quaterData.reshape((N_quater, 4))
+
+accSource = 'Acceleration7.7.txt'
+accData = np.loadtxt(accSource)
+N_accData = int(accData.shape[0]/3)
+accData = accData.reshape((N_accData, 3))-accBias
+
+if N_quater < N_accData:
+    N = N_quater
+else:
+    N = N_accData
+
+quaterData = quaterData[:N, :]
+accData = accData[:N, :]
+accData = np.concatenate((np.zeros((N, 1)), accData), axis=1)
+
+new_accData = np.zeros((N, 4))
+new_oriData = np.zeros((N, 4))
+axis_Z = np.array([0, 0, 0, 1])
+
+for i in range(N):
+    new_accData[i] = quaternion_rotation(accData[i], quaterData[i])
+    if i % 30 == 0:
+        new_oriData[i] = quaternion_rotation(axis_Z, quaterData[i])
+    else:
+        new_oriData[i] = quaternion_rotation(np.array([0, 0, 0, 0]), quaterData[i])
+
+new_accData = new_accData[:, 1:]
+# new_oriData = new_oriData[:, 1:]
+new_oriData = np.concatenate((new_oriData[:, 1:], np.zeros((1, 3))), axis=0)
+accData = accData[:, 1:]
+
+lim = (-2, 2)
+# ----------------- Acc in 3 Direction ------------- #
+t = np.array(range(N))
+x = new_accData[:, 0]
+y = new_accData[:, 1]
+z = new_accData[:, 2]
+
+u = new_oriData[:, 0]
+v = new_oriData[:, 1]
+w = new_oriData[:, 2]
+# x = accData[:, 0]
+# y = accData[:, 1]
+# z = accData[:, 2]
+
+fig = plt.figure(1)
+ax1 = plt.subplot(331)
+ax2 = plt.subplot(332)
+ax3 = plt.subplot(333)
+
+plt.sca(ax1)
+plt.plot(t, x, c='blue')
+plt.title('Acc in X direction')
+plt.ylabel('a(m/s^2)')
+plt.ylim(lim)
+
+plt.sca(ax2)
+plt.plot(t, y, c='red')
+plt.title('Acc in Y direction')
+plt.ylim(lim)
+
+plt.sca(ax3)
+plt.plot(t, z, c='green')
+plt.title('Acc in Z direction')
+plt.ylim(lim)
+
+# ----------------- Vel in 3 Direction ------------- #
+velData = np.zeros((N+1, 3))
+posData = np.zeros((N+1, 3))
+
+for i in range(N):
+    # if abs(new_accData[i][0]) > 0.10 or abs(new_accData[i][1]) > 0.1 or abs(new_accData[i][2]) > 0.1:
+        velData[i + 1] = velData[i] + new_accData[i] * (1 / 30)
+    # else:
+    #     velData[i + 1] = velData[i]
+for j in range(N):
+    posData[j + 1] = posData[j] + velData[j]*(1/30)
+
+t = np.array(range(N+1))
+x = velData[:, 0]
+y = velData[:, 1]
+z = velData[:, 2]
+
+ax4 = plt.subplot(334)
+ax5 = plt.subplot(335)
+ax6 = plt.subplot(336)
+
+plt.sca(ax4)
+plt.plot(t, x, c='blue')
+plt.title('Vel in X direction')
+plt.ylabel('v(m/s)')
+plt.ylim(lim)
+
+plt.sca(ax5)
+plt.plot(t, y, c='red')
+plt.title('Vel in Y direction')
+plt.ylim(lim)
+
+plt.sca(ax6)
+plt.plot(t, z, c='green')
+plt.title('Vel in Z direction')
+plt.ylim(lim)
+
+# ------------------------------- Trajectory in 3 Direction ------------------------ #
+x = posData[:, 0]
+y = posData[:, 1]
+z = posData[:, 2]
+
+ax7 = plt.subplot(337)
+ax8 = plt.subplot(338)
+ax9 = plt.subplot(339)
+
+plt.sca(ax7)
+plt.plot(t, x, c='blue')
+plt.title('Trajectory in X direction')
+plt.xlabel('time')
+plt.ylabel('s(m)')
+plt.ylim(lim)
+
+plt.sca(ax8)
+plt.plot(t, y, c='red')
+plt.title('Trajectory in Y direction')
+plt.xlabel('time')
+plt.ylim(lim)
+
+plt.sca(ax9)
+plt.plot(t, z, c='green')
+plt.title('Trajectory in Z direction')
+plt.xlabel('time')
+plt.ylim(lim)
+
+u = new_oriData[:, 0]
+v = new_oriData[:, 1]
+w = new_oriData[:, 2]
+
+fig2 = plt.figure(2)
+ax = plt.gca(projection='3d')
+ax.quiver(x, y, z, u, v, w, length=0.5, normalize=True, color='blue')
+ax.set_zlabel('Z', fontdict={'size': 15, 'color': 'red'})
+ax.set_ylabel('Y', fontdict={'size': 15, 'color': 'red'})
+ax.set_xlabel('X', fontdict={'size': 15, 'color': 'red'})
+ax.set_xlim(lim)
+ax.set_ylim(lim)
+ax.set_zlim(lim)
+label1 = 'start'
+label2 = 'end'
+ax.text(x[0], y[0], z[0], label1)
+ax.text(x[-1], y[-1], z[-1], label2)
+
+plt.show()
