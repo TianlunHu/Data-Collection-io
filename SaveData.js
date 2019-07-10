@@ -275,10 +275,10 @@ function StartSensor() {
         accelerometer = new LinearAccelerationSensor({
             frequency: 200
         });
-        accHighPass = new HighPassFilterData(accelerometer, 0.8);
-        accLowPass = new LowPassFilterData(accHighPass, 0.85);
-//        accLowPass = new LowPassFilterData(accelerometer, 0.85);
-//        accHighPass = new HighPassFilterData(accLowPass, 0.8);
+//        accHighPass = new HighPassFilterData(accelerometer, 0.8);
+//        accLowPass = new LowPassFilterData(accHighPass, 0.85);
+        accLowPass = new LowPassFilterData(accelerometer, 0.85);
+        accHighPass = new HighPassFilterData(accLowPass, 0.8);
 
         gyroscope = new Gyroscope({
             frequency: 200
@@ -291,12 +291,12 @@ function StartSensor() {
         });
 
         accelerometer.addEventListener('reading', e => {
-            accHighPass.update(accelerometer);
-            accLowPass.update(accHighPass);
-            accelerationHandler(accLowPass, AccVec);
-//            accLowhPass.update(accelerometer);
-//            accHighPass.update(accLowPass);
-//            accelerationHandler(accHighPass, AccVec);
+//            accHighPass.update(accelerometer);
+//            accLowPass.update(accHighPass);
+//            accelerationHandler(accLowPass, AccVec);
+            accLowhPass.update(accelerometer);
+            accHighPass.update(accLowPass);
+            accelerationHandler(accHighPass, AccVec);
         });
 
         gyroscope.addEventListener('reading', e => {
