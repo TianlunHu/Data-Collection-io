@@ -222,7 +222,7 @@ function StartSensor() {
     OriVec = [];
     TsVec = [];
     // ----------------Motion Sensors (IMU) ---------------- //
-    /*function OrientationHandler(orientation, OV) {
+    function OrientationHandler(orientation, OV) {
         let info, abcd = "[A, B, C, D]";
         let Q = orientation.quaternion;
         let x = Q[0];
@@ -247,9 +247,9 @@ function StartSensor() {
         logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
         logo.style.MozTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
         logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-    }*/
+    }
 
-    /*function accelerationHandler(acceleration, AV) {
+    function accelerationHandler(acceleration, AV) {
         var info, xyz = "[X, Y, Z]";
 
         info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
@@ -257,7 +257,7 @@ function StartSensor() {
         info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
         AV.push(info);
         document.getElementById('moAccel').innerHTML = info;
-    }*/
+    }
     
     function MotionHandler(acceleration, orientation, AV, OV) {
         // ---------- Orientator ----------- //
@@ -312,9 +312,9 @@ function StartSensor() {
         accelerometer.onreading = () => {
             accHighPass.update(accelerometer);
             accLowPass.update(accHighPass);
-            /*accelerationHandler(accLowPass, AccVec);
-            OrientationHandler(orientator, OriVec);*/
-            MotionHandler(accLowPass, orientator, AccVec, OriVec);
+            accelerationHandler(accLowPass, AccVec);
+            OrientationHandler(orientator, OriVec);
+            /*MotionHandler(accLowPass, orientator, AccVec, OriVec);*/
             let current = accelerometer.timestamp / 1000;
             document.getElementById("timeStamp").innerHTML = current;
             TsVec.push(current + ', ');
