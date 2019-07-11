@@ -218,6 +218,7 @@ class HighPassFilterData {
 };
 
 function StartSensor() {
+    let Freq = 30;
     AccVec = [];
     rotVec = [];
     OriVec = [];
@@ -273,21 +274,21 @@ function StartSensor() {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
         /*window.addEventListener('deviceorientation', deviceOrientationHandler, false);*/
         accelerometer = new LinearAccelerationSensor({
-            frequency: 200
+            frequency: Freq
         });
         accHighPass = new HighPassFilterData(accelerometer, 0.8);
-        accLowPass = new LowPassFilterData(accHighPass, 0.85);
-//        accLowPass = new LowPassFilterData(accelerometer, 0.85);
+        accLowPass = new LowPassFilterData(accHighPass, 0.8);
+//        accLowPass = new LowPassFilterData(accelerometer, 0.8);
 //        accHighPass = new HighPassFilterData(accLowPass, 0.8);
 
         gyroscope = new Gyroscope({
-            frequency: 200
+            frequency: Freq
         });
         
         gyroHighPass = new HighPassFilterData(gyroscope, 0.8);
         
         orientator = new AbsoluteOrientationSensor({
-            frequency: 200
+            frequency: Freq
         });
 
         accelerometer.addEventListener('reading', e => {
