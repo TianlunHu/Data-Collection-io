@@ -289,10 +289,10 @@ function StartSensor() {
         });
 
         accelerometer.addEventListener('reading', e => {
-//            accHighPass.update(accelerometer);
-//            accLowPass.update(accHighPass);
-//            accelerationHandler(accLowPass, AccVec);
-            accelerationHandler(accelerometer, AccVec);
+            accHighPass.update(accelerometer);
+            accLowPass.update(accHighPass);
+            accelerationHandler(accLowPass, AccVec);
+//            accelerationHandler(accelerometer, AccVec);
         });
 
         gyroscope.addEventListener('reading', e => {
