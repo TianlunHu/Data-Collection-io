@@ -44,7 +44,6 @@ downloadButton.addEventListener('click', () => {
     }, 100);
 
     //Save Sensor Date as .txt
-    const R = rotVec;
     const A = AccVec;
     const O = OriVec;
     const TiSt = TsVec;
@@ -54,10 +53,6 @@ downloadButton.addEventListener('click', () => {
     });
     saveAs(times, "TimeStamp  " + T + ".txt");
 
-    const rot = new Blob(R, {
-        type: "text/plain;charset=utf-8"
-    });
-    saveAs(rot, "Rotation  " + T + ".txt");
     const acc = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
@@ -168,7 +163,6 @@ async function init(constraints) {
 
 // ----------------------------------- Sensors ---------------------------------- //
 var AccVec = [];
-var rotVec = [];
 var OriVec = [];
 var TsVec = [];
 let accelerometer;
@@ -214,9 +208,9 @@ class HighPassFilterData {
     }
   }
 };
-
+// -------------------- Call Sensor Function ---------------- // 
 function StartSensor() {
-    let Freq = 200;
+    let Freq = 500;
     AccVec = [];
     rotVec = [];
     OriVec = [];
