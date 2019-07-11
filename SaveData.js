@@ -268,9 +268,9 @@ function StartSensor() {
         let z = Q[2];
         let w = Q[3];
         Quater = abcd.replace("A", x.toFixed(3));
-        Quater = info.replace("B", y.toFixed(3));
-        Quater = info.replace("C", z.toFixed(3));
-        Quater = info.replace("D", w.toFixed(3));
+        Quater = Quater.replace("B", y.toFixed(3));
+        Quater = Quater.replace("C", z.toFixed(3));
+        Quater = Quater.replace("D", w.toFixed(3));
         document.getElementById("orSen").innerHTML = Quater;
         OV.push(Quater);
         
