@@ -212,7 +212,6 @@ class HighPassFilterData {
 function StartSensor() {
     let Freq = 500;
     AccVec = [];
-    rotVec = [];
     OriVec = [];
     TsVec = [];
     // ----------------Motion Sensors (IMU) ---------------- //
