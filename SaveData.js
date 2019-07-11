@@ -210,7 +210,7 @@ class HighPassFilterData {
 };
 // -------------------- Call Sensor Function ---------------- // 
 function StartSensor() {
-    let Freq = 500;
+    let Freq = 1000;
     AccVec = [];
     OriVec = [];
     TsVec = [];
