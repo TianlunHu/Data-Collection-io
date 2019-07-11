@@ -218,7 +218,7 @@ class HighPassFilterData {
 };
 
 function StartSensor() {
-    let Freq = 30;
+    let Freq = 200;
     AccVec = [];
     rotVec = [];
     OriVec = [];
