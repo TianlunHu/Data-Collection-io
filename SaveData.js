@@ -272,14 +272,11 @@ function StartSensor() {
 
     if ('LinearAccelerationSensor' in window && 'Gyroscope' in window && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
-        /*window.addEventListener('deviceorientation', deviceOrientationHandler, false);*/
         accelerometer = new LinearAccelerationSensor({
             frequency: Freq
         });
         accHighPass = new HighPassFilterData(accelerometer, 0.8);
         accLowPass = new LowPassFilterData(accHighPass, 0.8);
-//        accLowPass = new LowPassFilterData(accelerometer, 0.8);
-//        accHighPass = new HighPassFilterData(accLowPass, 0.8);
 
         gyroscope = new Gyroscope({
             frequency: Freq
@@ -292,12 +289,10 @@ function StartSensor() {
         });
 
         accelerometer.addEventListener('reading', e => {
-            accHighPass.update(accelerometer);
-            accLowPass.update(accHighPass);
-            accelerationHandler(accLowPass, AccVec);
-//            accLowhPass.update(accelerometer);
-//            accHighPass.update(accLowPass);
-//            accelerationHandler(accHighPass, AccVec);
+//            accHighPass.update(accelerometer);
+//            accLowPass.update(accHighPass);
+//            accelerationHandler(accLowPass, AccVec);
+            accelerationHandler(accelerometer, AccVec);
         });
 
         gyroscope.addEventListener('reading', e => {
