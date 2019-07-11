@@ -222,42 +222,6 @@ function StartSensor() {
     OriVec = [];
     TsVec = [];
     // ----------------Motion Sensors (IMU) ---------------- //
-    function OrientationHandler(orientation, OV) {
-        let info, abcd = "[A, B, C, D]";
-        let Q = orientation.quaternion;
-        let x = Q[0];
-        let y = Q[1];
-        let z = Q[2];
-        let w = Q[3];
-        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y));
-        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI);
-        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z));
-        document.getElementById("phi").innerHTML = phi.toFixed(0);
-        document.getElementById("theta").innerHTML = theta.toFixed(0);
-        document.getElementById("psi").innerHTML = psi.toFixed(0);
-
-        info = abcd.replace("A", x.toFixed(3));
-        info = info.replace("B", y.toFixed(3));
-        info = info.replace("C", z.toFixed(3));
-        info = info.replace("D", w.toFixed(3));
-        document.getElementById("orSen").innerHTML = info;
-        OV.push(info);
-        
-        var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-        logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-    }
-
-    function accelerationHandler(acceleration, AV) {
-        var info, xyz = "[X, Y, Z]";
-
-        info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
-        info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
-        info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
-        AV.push(info);
-        document.getElementById('moAccel').innerHTML = info;
-    }
     
     function MotionHandler(acceleration, orientation, AV, OV) {
         // ---------- Orientator ----------- //
@@ -312,10 +276,8 @@ function StartSensor() {
         accelerometer.onreading = () => {
             accHighPass.update(accelerometer);
             accLowPass.update(accHighPass);
-            accelerationHandler(accLowPass, AccVec);
-            OrientationHandler(orientator, OriVec);
-            /*MotionHandler(accLowPass, orientator, AccVec, OriVec);*/
-            let current = accelerometer.timestamp / 1000;
+            MotionHandler(accLowPass, orientator, AccVec, OriVec);
+            let current = (accelerometer.timestamp / 1000).toFixed(3);
             document.getElementById("timeStamp").innerHTML = current;
             TsVec.push(current + ', ');
             
