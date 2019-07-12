@@ -44,7 +44,6 @@ downloadButton.addEventListener('click', () => {
     }, 100);
 
     //Save Sensor Date as .txt
-    const R = rotVec;
     const A = AccVec;
     const O = OriVec;
     const TiSt = TsVec;
@@ -54,10 +53,6 @@ downloadButton.addEventListener('click', () => {
     });
     saveAs(times, "TimeStamp  " + T + ".txt");
 
-    const rot = new Blob(R, {
-        type: "text/plain;charset=utf-8"
-    });
-    saveAs(rot, "Rotation  " + T + ".txt");
     const acc = new Blob(A, {
         type: "text/plain;charset=utf-8"
     });
@@ -130,7 +125,7 @@ function startRecording() {
 function stopRecording() {
     mediaRecorder.stop();
     accelerometer.stop();
-    gyroscope.stop();
+    //gyroscope.stop();
     orientator.stop();
     console.log('Recorded Blobs: ', recordedBlobs);
 }
@@ -168,14 +163,11 @@ async function init(constraints) {
 
 // ----------------------------------- Sensors ---------------------------------- //
 var AccVec = [];
-var rotVec = [];
 var OriVec = [];
 var TsVec = [];
 let accelerometer;
 let accHighPass;
 let accLowPass;
-let gyroscope;
-let gyroHighPass;
 let orientator;
 
 function calcAngleDegrees(x, y) {
@@ -216,102 +208,75 @@ class HighPassFilterData {
     }
   }
 };
-
+// -------------------- Call Sensor Function ---------------- // 
 function StartSensor() {
-    let Freq = 200;
+    let Freq = 45;
     AccVec = [];
-    rotVec = [];
     OriVec = [];
     TsVec = [];
     // ----------------Motion Sensors (IMU) ---------------- //
-    function OrientationHandler(orientation, OV) {
-        let info, abcd = "[A, B, C, D]";
+    
+    function MotionHandler(acceleration, orientation, AV, OV) {
+        // ---------- Orientator ----------- //
+        let Quater, abcd = "A, B, C, D";
         let Q = orientation.quaternion;
         let x = Q[0];
         let y = Q[1];
         let z = Q[2];
         let w = Q[3];
-        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y));
-        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI);
-        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z));
-        document.getElementById("phi").innerHTML = phi.toFixed(0);
-        document.getElementById("theta").innerHTML = theta.toFixed(0);
-        document.getElementById("psi").innerHTML = psi.toFixed(0);
-
-        info = abcd.replace("A", x.toFixed(3));
-        info = info.replace("B", y.toFixed(3));
-        info = info.replace("C", z.toFixed(3));
-        info = info.replace("D", w.toFixed(3));
-        document.getElementById("orSen").innerHTML = info;
-        OV.push(info);
+        Quater = abcd.replace("A", x.toFixed(3));
+        Quater = Quater.replace("B", y.toFixed(3));
+        Quater = Quater.replace("C", z.toFixed(3));
+        Quater = Quater.replace("D", w.toFixed(3));
+        document.getElementById("orSen").innerHTML = Quater;
+        OV.push(Quater);
         
-        var logo = document.getElementById("imgLogo");
-        logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-        logo.style.MozTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-        logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
-    }
-
-    function accelerationHandler(acceleration, AV) {
-        var info, xyz = "[X, Y, Z]";
+        // ---------- Accelerater ----------- //
+        let info, xyz = "X, Y, Z";
 
         info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
         info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
         AV.push(info);
         document.getElementById('moAccel').innerHTML = info;
+        
+        // ---------- Visualization ---------- //
+        let phi = calcAngleDegrees(2*(w*x+y*z), 1-2*(x*x+y*y));
+        let theta = (Math.asin(2*(w*y-z*x)) * 180 / Math.PI);
+        let psi = calcAngleDegrees(2*(w*z+x*y), 1-2*(y*y+z*z));
+        document.getElementById("phi").innerHTML = phi.toFixed(0);
+        document.getElementById("theta").innerHTML = theta.toFixed(0);
+        document.getElementById("psi").innerHTML = psi.toFixed(0);
+        
+        let logo = document.getElementById("imgLogo");
+        logo.style.webkitTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
+        logo.style.MozTransform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
+        logo.style.transform = "rotate(" + (theta) + "deg) rotate3d(1,0,0, " + ((phi) * -1 + 90) + "deg)";
     }
 
-    function rotationHandler(rotation, RV) {
-        var info, xyz = "[X, Y, Z]";
-        info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
-        info = info.replace("Y", rotation.beta && rotation.beta.toFixed(3));
-        info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
-        document.getElementById("moRotation").innerHTML = info;
-        RV.push(info);
-    }
-
-    if ('LinearAccelerationSensor' in window && 'Gyroscope' in window && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
+    if ('LinearAccelerationSensor' in window  && 'DeviceOrientationEvent' in window && 'AbsoluteOrientationSensor' in window) {
         document.getElementById('moApi').innerHTML = 'Motion Sensor detected';
         accelerometer = new LinearAccelerationSensor({
             frequency: Freq
         });
         accHighPass = new HighPassFilterData(accelerometer, 0.8);
         accLowPass = new LowPassFilterData(accHighPass, 0.8);
-
-        gyroscope = new Gyroscope({
-            frequency: Freq
-        });
-        
-        gyroHighPass = new HighPassFilterData(gyroscope, 0.8);
         
         orientator = new AbsoluteOrientationSensor({
             frequency: Freq
         });
-
-        accelerometer.addEventListener('reading', e => {
+        
+        accelerometer.onreading = () => {
             accHighPass.update(accelerometer);
             accLowPass.update(accHighPass);
-            accelerationHandler(accLowPass, AccVec);
-//            accelerationHandler(accelerometer, AccVec);
-        });
-
-        gyroscope.addEventListener('reading', e => {
-            gyroHighPass.update(gyroscope);
-            rotationHandler({
-            alpha: gyroHighPass.x,
-            beta: gyroHighPass.y,
-            gamma: gyroHighPass.z
-        }, rotVec)});
-
-        orientator.addEventListener('reading', e => {
-            let current = Date.now() / 1000;
+            MotionHandler(accLowPass, orientator, AccVec, OriVec);
+            let current = (accelerometer.timestamp / 1000).toFixed(3);
             document.getElementById("timeStamp").innerHTML = current;
             TsVec.push(current + ', ');
-            OrientationHandler(orientator, OriVec)
-        });
+            
+        }
 
         accelerometer.start();
-        gyroscope.start();
         orientator.start();
 
     } else if ('DeviceMotionEvent' in window) {
