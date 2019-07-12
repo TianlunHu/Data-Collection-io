@@ -229,7 +229,7 @@ function StartSensor() {
         Quater = Quater.replace("C", z.toFixed(3));
         Quater = Quater.replace("D", w.toFixed(3));
         document.getElementById("orSen").innerHTML = Quater;
-        OV.push(Quater);
+        OV.push(Quater + ' ');
         
         // ---------- Accelerater ----------- //
         let info, xyz = "X Y Z";
@@ -237,7 +237,7 @@ function StartSensor() {
         info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
         info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
-        AV.push(info);
+        AV.push(info + ' ');
         document.getElementById('moAccel').innerHTML = info;
         
         // ---------- Visualization ---------- //
