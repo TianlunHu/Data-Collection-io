@@ -218,7 +218,7 @@ function StartSensor() {
     
     function MotionHandler(acceleration, orientation, AV, OV) {
         // ---------- Orientator ----------- //
-        let Quater, abcd = "A, B, C, D";
+        let Quater, abcd = "A B C D";
         let Q = orientation.quaternion;
         let x = Q[0];
         let y = Q[1];
@@ -232,7 +232,7 @@ function StartSensor() {
         OV.push(Quater);
         
         // ---------- Accelerater ----------- //
-        let info, xyz = "X, Y, Z";
+        let info, xyz = "X Y Z";
 
         info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
         info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
@@ -272,7 +272,7 @@ function StartSensor() {
             MotionHandler(accLowPass, orientator, AccVec, OriVec);
             let current = (accelerometer.timestamp / 1000).toFixed(3);
             document.getElementById("timeStamp").innerHTML = current;
-            TsVec.push(current + ', ');
+            TsVec.push(current + ' ');
             
         }
 
