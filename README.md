@@ -13,4 +13,4 @@ People can open this webpage with mobile phone or tablet, which devices that sup
 With IMU data from inersial sonser in moblie devices, veolocity, orientation and even motion trajactory could be recoverd from raw data.
 here is an example "trajectory.py" which could recover the simple motion with collected data.
 ![interface](img/Acc.png)
-![interface](img/Figure_1HL.png)
+![interface](img/Figure_2HL.png)
