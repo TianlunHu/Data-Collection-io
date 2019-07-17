@@ -7,5 +7,5 @@ People can open this webpage with mobile phone or tablet, which devices that sup
 
 ### link: https://tianlunhu.github.io/DataCollection/
 ### An web interface demo:
-![interface](web-interface.png)
+![interface](img/web-interface.png)
 
