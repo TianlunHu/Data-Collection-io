@@ -169,6 +169,7 @@ let accelerometer;
 let accHighPass;
 let accLowPass;
 let orientator;
+let StartTime;
 
 function calcAngleDegrees(x, y) {
   return Math.atan2(x, y) * 180 / Math.PI;
@@ -210,6 +211,7 @@ class HighPassFilterData {
 };
 // -------------------- Call Sensor Function ---------------- // 
 function StartSensor() {
+    StartTime = Date.now();              
     let Freq = 45;
     AccVec = [];
     OriVec = [];
