@@ -81,19 +81,6 @@ canvas {
   vertical-align: top;
 }
 
-.container {
-  perspective: 300;
-  -webkit-perspective: 300;
-}
-
-#imgLogo {
-  width: 275px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  padding: 15px;
-}
-
 code {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
@@ -249,10 +236,10 @@ textarea {
 video {
   background: #222;
   margin: 0 0 20px 0;
-  --width: 45%;
+  --width: 100%;
   width: var(--width);
   height: calc(var(--width) * 0.75);
-  vertical-align: top;
+/*  vertical-align: top;*/
 }
 
 video#localVideo {
