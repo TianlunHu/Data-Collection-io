@@ -236,10 +236,10 @@ textarea {
 video {
   background: #222;
   margin: 0 0 20px 0;
-  --width: 100%;
+  --width: 80%;
   width: var(--width);
   height: calc(var(--width) * 0.75);
-/*  vertical-align: top;*/
+  vertical-align: top;
 }
 
 video#localVideo {
